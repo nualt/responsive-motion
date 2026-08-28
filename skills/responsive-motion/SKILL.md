@@ -22,6 +22,17 @@ by one.
 - "We keep adding `@media (1024px–1279px) and (orientation: landscape)` rules."
 - "Weak machines and reduced-motion users must still see all content."
 
+## Sub-commands
+
+`/responsive-motion` with no argument runs the full procedure below.
+With an argument, run only that phase:
+
+| Command | Does |
+|---|---|
+| `/responsive-motion diagnose` | Phase 1 only. Lists scenes, criteria, magic values, reproduces on the six formats with numbers, and proposes the file list. Writes nothing. |
+| `/responsive-motion implement <section>` | Phase 2 on one named section (for example `implement services-board`). Refuses more than one section per call. |
+| `/responsive-motion verify` | Phase 3 only: one batched round across the six formats with the measurement snippets from `reference/verify.md`, then a findings list. Writes nothing. |
+
 ## Read first
 
 1. [reference/principles.md](reference/principles.md) - the seven rules and the decision model (levels: scene, expansion-only, flat, mobile, lite). Read before touching code.
