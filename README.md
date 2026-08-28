@@ -88,6 +88,14 @@ Once installed, describe what you see:
 Each of these triggers the skill. It diagnoses with measurements first,
 names the files it will touch, then implements and verifies.
 
+Or drive it phase by phase:
+
+```
+/responsive-motion diagnose              # measurements + file list, writes nothing
+/responsive-motion implement <section>   # one named section per call
+/responsive-motion verify                # one measured round across six formats
+```
+
 ## How a session goes
 
 1. **Diagnose.** The skill lists the scenes, every activation criterion in
