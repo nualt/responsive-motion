@@ -45,15 +45,12 @@ breakpoint the design system already uses. One constant, one place.
 
 ## Install
 
-As a Claude Code plugin (this repository is its own marketplace):
-
 ```
 /plugin marketplace add nualt/responsive-motion
 /plugin install responsive-motion@responsive-motion
 ```
 
-As a plain skill, for Claude Code or any agent that reads `SKILL.md`
-folders:
+Or as a plain skill, for any agent that reads `SKILL.md` folders:
 
 ```bash
 git clone https://github.com/nualt/responsive-motion ~/.claude/skills/_responsive-motion
