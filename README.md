@@ -14,14 +14,14 @@ else, and verifies with measurements instead of screenshots.
 As a Claude Code plugin (the repo is its own marketplace):
 
 ```
-/plugin marketplace add thomassarazin/responsive-motion
+/plugin marketplace add nualt/responsive-motion
 /plugin install responsive-motion@responsive-motion
 ```
 
 Or as a plain skill, for any agent that reads `SKILL.md` folders:
 
 ```bash
-git clone https://github.com/thomassarazin/responsive-motion /tmp/responsive-motion
+git clone https://github.com/nualt/responsive-motion /tmp/responsive-motion
 ln -s /tmp/responsive-motion/skills/responsive-motion ~/.claude/skills/responsive-motion
 ```
 

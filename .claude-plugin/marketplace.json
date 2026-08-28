@@ -3,8 +3,8 @@
   "name": "responsive-motion",
   "description": "Make scroll-animated sites degrade cleanly on every device.",
   "owner": {
-    "name": "Thomas Sarazin",
-    "url": "https://github.com/thomassarazin"
+    "name": "nualt",
+    "url": "https://github.com/nualt"
   },
   "plugins": [
     {
