@@ -45,20 +45,48 @@ breakpoint the design system already uses. One constant, one place.
 
 ## Install
 
+### Claude Code
+
 ```
 /plugin marketplace add nualt/responsive-motion
+```
+```
 /plugin install responsive-motion@responsive-motion
 ```
 
-Or as a plain skill, for any agent that reads `SKILL.md` folders:
+Two separate prompts. Then `/responsive-motion`, or just describe the
+symptom and let it trigger.
+
+### Other agents
+
+Any agent that reads `SKILL.md` folders (Codex, Cursor, OpenCode…), with
+[npx skills](https://github.com/vercel-labs/skills):
 
 ```bash
-git clone https://github.com/nualt/responsive-motion ~/.claude/skills/_responsive-motion
-ln -s ~/.claude/skills/_responsive-motion/skills/responsive-motion ~/.claude/skills/responsive-motion
+npx skills add nualt/responsive-motion
 ```
 
-Then invoke `/responsive-motion`, or describe the symptom ("the pinned
-photo is crushed on 1366×768") and let it trigger.
+Or by hand:
+
+```bash
+git clone https://github.com/nualt/responsive-motion
+ln -s "$PWD/responsive-motion/skills/responsive-motion" ~/.claude/skills/responsive-motion
+```
+
+## Usage
+
+Once installed, describe what you see:
+
+```
+"The photo in the pinned services section is crushed on 1366×768"
+"The method column is sticky but taller than the screen on my iPad"
+"The blue block overlaps the hero photo by a few pixels on some laptops"
+"The navbar turns blue at the top of the page on small screens"
+"We keep adding iPad-landscape media queries and the next device breaks"
+```
+
+Each of these triggers the skill. It diagnoses with measurements first,
+names the files it will touch, then implements and verifies.
 
 ## How a session goes
 
