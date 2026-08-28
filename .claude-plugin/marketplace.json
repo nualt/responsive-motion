@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "responsive-motion",
+  "description": "Make scroll-animated sites degrade cleanly on every device.",
+  "owner": {
+    "name": "Thomas Sarazin",
+    "url": "https://github.com/thomassarazin"
+  },
+  "plugins": [
+    {
+      "name": "responsive-motion",
+      "description": "One criterion for where scroll choreographies exist, an existing static fallback everywhere else, verification by measurement instead of screenshots.",
+      "source": "./",
+      "category": "frontend"
+    }
+  ]
+}

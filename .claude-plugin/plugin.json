@@ -1,0 +1,13 @@
+{
+  "name": "responsive-motion",
+  "version": "1.0.0",
+  "description": "Degrade scroll choreographies (GSAP pins, sticky viewports, image swaps, expansion transitions) cleanly on every device: one criterion, an existing static fallback, verification by measurement.",
+  "author": {
+    "name": "Thomas Sarazin",
+    "url": "https://github.com/thomassarazin"
+  },
+  "homepage": "https://github.com/thomassarazin/responsive-motion",
+  "repository": "https://github.com/thomassarazin/responsive-motion",
+  "license": "MIT",
+  "keywords": ["responsive", "animation", "gsap", "scrolltrigger", "tailwind", "frontend", "accessibility"]
+}

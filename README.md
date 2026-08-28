@@ -11,8 +11,18 @@ else, and verifies with measurements instead of screenshots.
 
 ## Install
 
+As a Claude Code plugin (the repo is its own marketplace):
+
+```
+/plugin marketplace add thomassarazin/responsive-motion
+/plugin install responsive-motion@responsive-motion
+```
+
+Or as a plain skill, for any agent that reads `SKILL.md` folders:
+
 ```bash
-git clone https://github.com/<you>/responsive-motion ~/.claude/skills/responsive-motion
+git clone https://github.com/thomassarazin/responsive-motion /tmp/responsive-motion
+ln -s /tmp/responsive-motion/skills/responsive-motion ~/.claude/skills/responsive-motion
 ```
 
 Claude Code picks it up from the frontmatter in `SKILL.md`. Invoke with
@@ -22,11 +32,12 @@ Claude Code picks it up from the frontmatter in `SKILL.md`. Invoke with
 
 | File | Purpose |
 |---|---|
-| `SKILL.md` | Trigger, task patterns, procedure, decision model, non-negotiables |
-| `reference/principles.md` | The seven rules, the five levels, the per-device expectation table |
-| `reference/recipes.md` | Thirteen recipes with code: single criterion, matchMedia helpers, static CSS in two parts, subgrid alignment, real-box calibration, trigger priority, navbar |
-| `reference/verify.md` | Formats, tooling (chrome-devtools MCP, claude-in-chrome, by hand), copy-paste measurement snippets, pitfalls |
-| `reference/anti-patterns.md` | What not to do, with the failure that taught each rule |
+| `skills/responsive-motion/SKILL.md` | Trigger, task patterns, procedure, decision model, non-negotiables |
+| `…/reference/principles.md` | The seven rules, the five levels, the per-device expectation table |
+| `…/reference/recipes.md` | Thirteen recipes with code: single criterion, matchMedia helpers, static CSS in two parts, subgrid alignment, real-box calibration, trigger priority, navbar |
+| `…/reference/verify.md` | Formats, tooling (chrome-devtools MCP, claude-in-chrome, by hand), copy-paste measurement snippets, pitfalls |
+| `…/reference/anti-patterns.md` | What not to do, with the failure that taught each rule |
+| `.claude-plugin/` | Plugin manifest and single-plugin marketplace |
 
 ## The model in one table
 
