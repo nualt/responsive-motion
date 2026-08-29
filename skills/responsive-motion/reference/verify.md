@@ -158,3 +158,12 @@ Pass: each array holds identical values.
 - **Bounded rounds**: one full round across formats, fix everything it
   shows, one confirmation round, stop. Open-ended screenshot loops cost
   money and find less than the numbers above.
+- **Forced dark mode is invisible on iOS.** Chrome Android and Samsung
+  Internet repaint light-only sites; Safari never does. Test on an
+  Android phone in dark mode, or emulate `prefers-color-scheme: dark`
+  in Chrome's Rendering panel *after* removing `color-scheme: only
+  light` to see what the client saw.
+- **Anchor landing**: after a same-page hash jump,
+  `target.getBoundingClientRect().top` must be ≥ the navbar height.
+  Below it, the navbar hides the heading.
+

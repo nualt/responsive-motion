@@ -190,3 +190,43 @@ Every value that "depends on the format" should be a `clamp()` on a
 viewport unit, a real measurement, or a flex/grid consequence. If you
 are about to write `@media (width >= 1024px) and (width < 1280px) and
 (orientation: landscape)`, stop: that is a device, not a criterion.
+
+## 14. Phone "dark mode" the site never declared
+
+Chrome for Android ("Auto dark theme") and Samsung Internet repaint any
+site that declares no colour scheme when the phone is in dark mode:
+inverted background, shifted brand blues, and a logo that the navbar
+turns white (`filter: brightness(0) invert(1)`) comes out black. iOS
+Safari never does this, so an iPhone in dark mode reproduces nothing.
+A light-only site opts out once:
+
+```html
+<meta name="color-scheme" content="only light">
+```
+
+```css
+:root { color-scheme: only light; }
+```
+
+Both: the meta avoids a flash of darkened content, the CSS covers
+elements rendered before the meta is parsed. Symptom to recognise:
+"the colours on my phone are not the ones on the PC", "the logo turns
+black", "put the white background back" — with no dark theme in the
+code.
+
+## 15. Native anchors land under the sticky navbar
+
+A same-page `<a href="/#services">` (mobile menu on the home page) is a
+native hash jump: the router's pathname does not change, so a
+`useEffect([pathname])` scroll handler with a navbar offset never runs.
+The section's top lands at viewport top, and the sticky navbar hides its
+first 60–70 px — "the photo and the text are offset on this page only".
+One line for every anchor, native or scripted:
+
+```css
+:root { scroll-padding-top: var(--navbar-height); }
+```
+
+Keep the scripted handler for cross-page navigation; the CSS covers the
+native path and costs nothing where a script already offsets.
+

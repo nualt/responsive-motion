@@ -54,6 +54,16 @@ preference.
   also…" outside the named section eroded trust faster than the bug
   did. Rule: announce, then do exactly that.
 
+- **Reproduce a phone report on another OS.** A client on Android saw
+  a dark, inverted site; the designer's iPhone in dark mode showed the
+  PC colours, and the report looked "impossible". Rule: forced dark
+  mode is a browser feature (Chrome Android, Samsung Internet), not a
+  device setting — declare `color-scheme: only light` and ask which
+  phone.
+- **Trust the router's scroll handler for same-page anchors.** It runs
+  on pathname change; a hash jump on the same page is native and lands
+  under the sticky navbar. Rule: `scroll-padding-top` on `:root`.
+
 ## Do
 
 - Decide the levels once, write them in the design-system doc after

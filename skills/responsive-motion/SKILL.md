@@ -1,6 +1,6 @@
 ---
 name: responsive-motion
-description: Make a scroll-animated site (GSAP pins, sticky viewports, sticky columns with image swaps, expansion transitions) degrade cleanly on every device without per-device hacks. Use when a site "works on my Mac" but breaks on tablets, short laptops (1366×768, 1280×720), windows with devtools open, weak machines, or prefers-reduced-motion; when a pinned photo is crushed; when a sticky element sticks with no room or refuses to stick; when an animated block overlaps its neighbour by a few pixels on some formats; when the navbar changes colour at the wrong moment; when whole sections stay invisible (opacity 0 waiting for an animation that never runs); or when the codebase is accumulating "iPad landscape" media queries. Triggers - responsive animation, scroll choreography on tablet, GSAP ScrollTrigger pin on small screen, sticky not fitting viewport, degrade animations, reduced motion fallback, crushed image in pinned section, media query per device.
+description: Make a scroll-animated site (GSAP pins, sticky viewports, sticky columns with image swaps, expansion transitions) degrade cleanly on every device without per-device hacks. Use when a site "works on my Mac" but breaks on tablets, short laptops (1366×768, 1280×720), windows with devtools open, weak machines, or prefers-reduced-motion; when a pinned photo is crushed; when a sticky element sticks with no room or refuses to stick; when an animated block overlaps its neighbour by a few pixels on some formats; when the navbar changes colour at the wrong moment; when whole sections stay invisible (opacity 0 waiting for an animation that never runs); when the codebase is accumulating "iPad landscape" media queries; when a client's phone shows inverted colours or a black logo that no other device reproduces (forced dark mode); or when a same-page anchor from the mobile menu lands under the sticky navbar. Triggers - responsive animation, scroll choreography on tablet, GSAP ScrollTrigger pin on small screen, sticky not fitting viewport, degrade animations, reduced motion fallback, crushed image in pinned section, media query per device, dark mode on Android only, colour-scheme only light, anchor hidden under navbar, scroll-padding-top.
 ---
 
 # Responsive motion
@@ -21,6 +21,8 @@ by one.
 - "Navbar turns blue at the top of the page on laptops."
 - "We keep adding `@media (1024px–1279px) and (orientation: landscape)` rules."
 - "Weak machines and reduced-motion users must still see all content."
+- "On the client's phone the colours are wrong / the logo turns black, my phone is fine."
+- "From the mobile menu, one section lands offset under the navbar."
 
 ## Sub-commands
 
