@@ -193,12 +193,12 @@ are about to write `@media (width >= 1024px) and (width < 1280px) and
 
 ## 14. Phone "dark mode" the site never declared
 
-Chrome for Android ("Auto dark theme") and Samsung Internet repaint any
-site that declares no colour scheme when the phone is in dark mode:
-inverted background, shifted brand blues, and a logo that the navbar
-turns white (`filter: brightness(0) invert(1)`) comes out black. iOS
-Safari never does this, so an iPhone in dark mode reproduces nothing.
-A light-only site opts out once:
+Chrome for Android ("Auto dark theme") repaints any site that declares
+no colour scheme when the phone is in dark mode: inverted background,
+shifted brand blues, and a logo that the navbar turns white
+(`filter: brightness(0) invert(1)`) comes out black. iOS Safari never
+does this, so an iPhone in dark mode reproduces nothing. A light-only
+site opts out once:
 
 ```html
 <meta name="color-scheme" content="only light">
@@ -213,6 +213,16 @@ elements rendered before the meta is parsed. Symptom to recognise:
 "the colours on my phone are not the ones on the PC", "the logo turns
 black", "put the white background back" — with no dark theme in the
 code.
+
+**Known limit — Samsung Internet.** Its "force dark" ignores
+`color-scheme` and `prefers-color-scheme` by default; it honours them
+only behind a user-side experimental flag ("Adaptive Force Dark" in
+`internet://flags`, or Labs → "Use website dark theme"). There is no
+site-side opt-out and no API to detect it. Keep the declaration (it is
+what Samsung reads *when* the flag is on, and what Chrome reads always),
+document the limit, and tell the client: Samsung Internet → menu → Dark
+mode → off, or open the site in Chrome. Every light site looks like this
+in that mode, not just theirs.
 
 ## 15. Native anchors land under the sticky navbar
 
@@ -230,3 +240,142 @@ One line for every anchor, native or scripted:
 Keep the scripted handler for cross-page navigation; the CSS covers the
 native path and costs nothing where a script already offsets.
 
+
+## 16. The real viewport is smaller than the screen
+
+What the site sees is the screen divided by the OS scale, minus the
+browser's own bars (~85–120 px: tabs, address bar, bookmarks). A "15-inch
+Full HD" Windows laptop ships at 150 % scaling: **1280 × ~630**. At
+125 %: 1536 × ~775. A 1366×768 laptop at 125 %: **1093 × 614**. On a
+Mac, a 1440×900 Air gives ~815. These are the majority of B2B laptops,
+not exotic cases — and none of them appears in a "1920×1080" device
+list. Browser zoom is remembered per site (Chrome, Safari, Edge): a
+client who once pressed Ctrl + once lives at 110–125 % forever, and a
+designer who zoomed `localhost` tests every format 20 % too small
+without knowing (`window.innerWidth` tells the truth; Cmd/Ctrl + 0
+resets).
+
+Consequence for verification: do not test devices, test **the worst
+case of each mode** — the shortest viewport where flat applies, the
+shortest where each scene applies — and let fluid values cover the rest.
+
+## 17. One threshold per scene
+
+A single "scene fits" height for the whole page is the first design and
+the wrong final one: a sticky column with a photo that fills the
+viewport fits at 600 px, a pinned board with four tabs and a photo does
+not fit under 700. Lowering the shared threshold to rescue one scene
+breaks the other; keep the shared criterion (width + pointer) and give
+each scene its own minimum height, as one JS constant and one CSS
+variant pair each:
+
+```css
+@custom-variant scene        { @media (width >= 64rem) and (height >= 700px) and (hover: hover) { @slot; } }
+@custom-variant method-scene { @media (width >= 64rem) and (height >= 600px) and (hover: hover) { @slot; } }
+```
+
+```ts
+export const SCENE_MIN_HEIGHT_PX = 700;        // pinned board
+export const METHOD_SCENE_MIN_HEIGHT_PX = 600; // sticky column
+```
+
+Each scene's `gsap.matchMedia` helper uses its own query; a unit test
+asserts the queries are built from the constants (a hard-coded `800px`
+in a test will fail the day the threshold moves, and it should).
+
+## 18. Size a sticky photo by geometry, never by a rem budget
+
+`height: calc(100dvh − navbar − 17rem)` looks precise and is fragile:
+the 17rem is the sum of everything above the photo *today* — title,
+intro, button, gaps. One extra line (narrower column, browser zoom,
+longer CMS text) and the photo runs past the viewport and gets cut. Let
+the column be the viewport and the photo take what is left:
+
+```html
+<div class="sticky top-[calc(var(--navbar-height)+2rem)]
+            h-[calc(100dvh-var(--navbar-height)-4rem)] flex flex-col gap-7">
+  <h2>…</h2><p>…</p><a>…</a>
+  <div class="relative flex-1 min-h-0 max-h-[46rem] overflow-hidden">
+    <img class="absolute inset-0 h-full w-full object-cover">
+  </div>
+</div>
+```
+
+`min-h-0` lets the photo shrink below its content size; the `max-h`
+keeps it from becoming a portrait giant on a 27-inch monitor (cap at
+the column width: at most square). The same applies to a pinned board:
+its photo's intrinsic height is a 16:9 spacer capped by
+`100dvh − navbar − <chrome>`, but that chrome depends on how many lines
+the description wraps to — which depends on width. Budget per width
+band if you must, but prefer a definite-height container with a
+`minmax(0, 1fr)` row.
+
+Tailwind note: arbitrary values with `*` (`calc(…-var(--space-8)*2)`)
+may not compile; write `4rem`. When a class silently fails, the
+container falls back to `h-fit` and the photo overflows — check the
+compiled CSS before blaming the layout.
+
+## 19. Column width drives column height
+
+In a two-column board (tabs left, panel right), the board is as tall as
+its tallest column, and the pinned viewport clips whatever exceeds it.
+At 1280 px the tab column (one third) is ~330 px wide: "Collective
+Dynamics & Team Cohesion" wraps, its excerpt wraps, the column grows by
+~150 px and the bottom of the board disappears. Nothing is wrong with
+the photo. Fix the width first: 40 / 60 under the short-height band,
+50 / 50 in the 1024–1279 band (where even 40 % wraps), only then touch
+paddings.
+
+Two traps that cost an afternoon each:
+
+- **A selector that matches nothing does not warn.** The grid div had
+  `lg:grid`, the rule targeted `.grid`: the 40 % column "applied" for
+  hours in the developer's head. Give every CSS hook a dedicated class
+  (`services-showcase__grid`), never a utility class.
+- **A `col-span-2` written for three columns explodes a two-column
+  grid**: the panel jumps into an implicit third column and the layout
+  looks destroyed. Any rule that changes the column count must also
+  reset the spans of its children (`grid-column: auto`).
+
+## 20. Modal menus lock the scroll — twice
+
+A navigation drawer built on a modal dialog (Radix Sheet and friends)
+locks body scrolling while open. Two consequences:
+
+- **Same-page anchors from the menu do nothing.** The native hash jump
+  runs while the lock is on and never lands. Prevent the default, close
+  the drawer, and scroll in the dialog's `onCloseAutoFocus` (after
+  unmount, lock released) with `element.scrollIntoView()` +
+  `history.replaceState(null, "", "#id")`. Cross-page links stay native.
+- **The layout jumps on open and close** with a classic scrollbar
+  (Windows, Mac with a mouse): the lock hides the scrollbar and adds a
+  compensating `margin-right` to `body`, then removes it. Reserve the
+  gutter permanently and disable the compensation:
+
+```css
+html { scrollbar-gutter: stable; }
+body[data-scroll-locked] { margin-right: 0 !important; }
+```
+
+## 21. A hard-coded initial state is a visible frame
+
+A pinned panel that starts at `transform: scale(0.5, 0.09)` in the
+markup and is calibrated by GSAP on the first tick shows one frame of
+the wrong size: the blue band "jumps" at load. Mount the panel
+invisible, measure, then `gsap.set(panel, { scaleX, scaleY, autoAlpha: 1 })`
+before the timeline's `fromTo`. The element the user sees at load must
+be styled by CSS alone (here, the label carries its own background), not
+by an animation's rest state.
+
+## 22. One change per validated screenshot
+
+A day of layout fixes goes wrong in a predictable way: a report is
+read too broadly ("the photo" → both sections), an unrequested
+improvement rides along with "commit and push", a measurement is taken
+where the user said "no browser", a trial is reverted because a
+follow-up message was misread as a complaint. Each one cost a rollback
+and trust. Rules that held: quote the request back in one line before
+editing; touch only the named section; after "commit", commit — nothing
+else; when a screenshot contradicts your model, believe the screenshot
+and go read the compiled CSS; when a message is ambiguous, ask one
+question rather than act on the wrong reading twice.

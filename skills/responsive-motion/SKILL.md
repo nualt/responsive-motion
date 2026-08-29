@@ -1,6 +1,6 @@
 ---
 name: responsive-motion
-description: Make a scroll-animated site (GSAP pins, sticky viewports, sticky columns with image swaps, expansion transitions) degrade cleanly on every device without per-device hacks. Use when a site "works on my Mac" but breaks on tablets, short laptops (1366×768, 1280×720), windows with devtools open, weak machines, or prefers-reduced-motion; when a pinned photo is crushed; when a sticky element sticks with no room or refuses to stick; when an animated block overlaps its neighbour by a few pixels on some formats; when the navbar changes colour at the wrong moment; when whole sections stay invisible (opacity 0 waiting for an animation that never runs); when the codebase is accumulating "iPad landscape" media queries; when a client's phone shows inverted colours or a black logo that no other device reproduces (forced dark mode); or when a same-page anchor from the mobile menu lands under the sticky navbar. Triggers - responsive animation, scroll choreography on tablet, GSAP ScrollTrigger pin on small screen, sticky not fitting viewport, degrade animations, reduced motion fallback, crushed image in pinned section, media query per device, dark mode on Android only, colour-scheme only light, anchor hidden under navbar, scroll-padding-top.
+description: Make a scroll-animated site (GSAP pins, sticky viewports, sticky columns with image swaps, expansion transitions) degrade cleanly on every device without per-device hacks. Use when a site "works on my Mac" but breaks on tablets, short laptops (1366×768, 1280×720), windows with devtools open, weak machines, or prefers-reduced-motion; when a pinned photo is crushed; when a sticky element sticks with no room or refuses to stick; when an animated block overlaps its neighbour by a few pixels on some formats; when the navbar changes colour at the wrong moment; when whole sections stay invisible (opacity 0 waiting for an animation that never runs); when the codebase is accumulating "iPad landscape" media queries; when a client's phone shows inverted colours or a black logo that no other device reproduces (forced dark mode); when a same-page anchor from the mobile menu lands under the sticky navbar or does nothing; when a client's laptop (Full HD at 150 %, 1366×768 at 125 %) shows a cut board or hero that no tested format reproduces; when a sticky photo is cut under browser zoom; or when the layout jumps as a modal menu opens or closes. Triggers - responsive animation, scroll choreography on tablet, GSAP ScrollTrigger pin on small screen, sticky not fitting viewport, degrade animations, reduced motion fallback, crushed image in pinned section, media query per device, dark mode on Android only, colour-scheme only light, anchor hidden under navbar, scroll-padding-top, real viewport behind browser chrome, Windows scaling 125 150, one threshold per scene, photo cut when zoomed, scroll lock layout jump, col-span two columns.
 ---
 
 # Responsive motion
@@ -22,7 +22,11 @@ by one.
 - "We keep adding `@media (1024px–1279px) and (orientation: landscape)` rules."
 - "Weak machines and reduced-motion users must still see all content."
 - "On the client's phone the colours are wrong / the logo turns black, my phone is fine."
-- "From the mobile menu, one section lands offset under the navbar."
+- "From the mobile menu, one section lands offset under the navbar." / "Menu links do nothing on the phone."
+- "The client says the page does not fit his screen; I tested a dozen formats and cannot reproduce."
+- "The sticky photo is cut when Safari is zoomed twice."
+- "The pinned board is cut at the bottom on a 1280×720 laptop."
+- "The layout jumps when the menu closes."
 
 ## Sub-commands
 
@@ -38,8 +42,8 @@ With an argument, run only that phase:
 ## Read first
 
 1. [reference/principles.md](reference/principles.md) - the seven rules and the decision model (levels: scene, expansion-only, flat, mobile, lite). Read before touching code.
-2. [reference/recipes.md](reference/recipes.md) - thirteen concrete recipes with code (GSAP + Tailwind v4, readable without them).
-3. [reference/verify.md](reference/verify.md) - how to measure, which formats, which numbers must be 0.
+2. [reference/recipes.md](reference/recipes.md) - twenty-two concrete recipes with code (GSAP + Tailwind v4, readable without them).
+3. [reference/verify.md](reference/verify.md) - how to measure, the real viewports behind common hardware, the worst case of each mode, which numbers must be 0.
 4. [reference/anti-patterns.md](reference/anti-patterns.md) - what not to do, with the failures that taught each rule.
 
 ## Procedure
@@ -76,14 +80,20 @@ One batched round across the six formats, fix everything it shows, one confirmat
 | mobile | < lg | mobile layout, no scenes |
 | lite (machine) | reduced-motion, Save-Data, ≤ 2 GB, ≤ 2 cores | no Lenis, no tweens, no masks, no entrance; independent of format |
 
-Pick the height threshold from the tallest scene and align it with a
-breakpoint the design system already uses. Do not invent a "tablet"
-layout: the fallback is the layout that already exists.
+Pick one height threshold **per scene** (a sticky column fits lower
+than a pinned board), each as a JS constant mirrored by a CSS variant.
+Do not invent a "tablet" layout: the fallback is the layout that already
+exists. Verify the shortest viewport of each mode, not a list of devices
+— the real viewport is the screen divided by the OS scale, minus the
+browser's bars (`reference/verify.md`).
 
 ## Non-negotiables
 
 - Never read geometry from a CSS token: `getPropertyValue('--x')` returns `calc(...)` as a string, `parseFloat` gives `NaN`, and the fallback hides the bug on the developer's screen.
 - Never `display: none` on stacked panels that must keep a stable height.
 - Never a per-device media query.
+- Never a rem budget for a photo's height: definite-height container, photo `flex-1 min-h-0`, capped.
+- Never a CSS hook on a utility class; a selector that matches nothing does not warn.
+- One change per validated screenshot; after "commit", commit — nothing else.
 - Never rewrite the global activation mechanism to fix one section. If a format needs its own rule, the criterion is wrong, not the format.
 - Never patch many files with a script. Nominal edits, one file at a time, reversible.

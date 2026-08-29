@@ -57,12 +57,45 @@ preference.
 - **Reproduce a phone report on another OS.** A client on Android saw
   a dark, inverted site; the designer's iPhone in dark mode showed the
   PC colours, and the report looked "impossible". Rule: forced dark
-  mode is a browser feature (Chrome Android, Samsung Internet), not a
-  device setting — declare `color-scheme: only light` and ask which
+  mode is a browser feature, not a device setting — declare
+  `color-scheme: only light` (fixes Chrome Android; Samsung Internet
+  ignores it by default, document that as a known limit) and ask which
   phone.
 - **Trust the router's scroll handler for same-page anchors.** It runs
   on pathname change; a hash jump on the same page is native and lands
   under the sticky navbar. Rule: `scroll-padding-top` on `:root`.
+- **Test devices instead of the worst case of each mode.** Six formats
+  were verified and none was the client's laptop (1366×768 at 125 % =
+  1093×614, or Full HD at 150 % minus the browser bar = 1280×630). Rule:
+  the real viewport is screen ÷ OS scale − browser chrome; verify the
+  shortest viewport where flat applies and the shortest where each scene
+  applies, and let fluid values cover the rest.
+- **Size a photo with a rem budget.** `100dvh − 17rem` was exact until
+  the intro wrapped one more line at a narrower width (Safari zoomed
+  twice): photo cut. Rule: definite-height column, photo `flex-1
+  min-h-0`, capped by a max-height.
+- **Lower a shared threshold to rescue one scene.** The sticky column
+  fit at 600 px, the pinned board did not fit under 700; one number
+  cannot serve both. Rule: one threshold per scene, mirrored JS/CSS.
+- **Fix the photo when the column is the problem.** At 1280 the board
+  overflowed because the tab labels wrapped, not because the photo was
+  too tall. Rule: measure which column is tallest before touching
+  anything; widen the column first.
+- **Write a CSS hook against a utility class.** `.grid` matched nothing
+  because the div had `lg:grid`; the fix "applied" for hours. Rule: a
+  dedicated class for every hook, then check the compiled CSS.
+- **Change a grid's column count without resetting spans.** A
+  `col-span-2` meant for three columns jumps into an implicit column
+  when the grid has two: the structure looks destroyed. Rule: every
+  column-count rule resets its children's `grid-column`.
+- **Let an animation's rest state style the first paint.** A panel
+  born at a hard-coded scale and recalibrated by GSAP jumps one frame at
+  load. Rule: CSS styles what is visible at load; animated elements mount
+  invisible and appear once measured.
+- **Do more than the sentence asked.** "Commit and push" got an extra
+  improvement; "enlarge the photo" touched two sections; "no browser"
+  got one more measurement. Each was rolled back. Rule: quote the request
+  in one line, do exactly that, stop.
 
 ## Do
 

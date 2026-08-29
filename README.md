@@ -25,6 +25,10 @@ This skill replaces that loop with one decision, made once.
 - **Separates the machine lever** (reduced-motion, Save-Data, weak
   hardware) from the format lever, so a powerful short laptop and a weak
   tall desktop each get the right thing.
+- **Knows the real viewport.** A "15-inch Full HD" laptop gives the site
+  1280 × ~630 px once Windows scaling and the browser's bars are taken
+  off; the skill verifies the shortest viewport of each mode instead of a
+  device list, and gives each scene its own height threshold.
 - **Verifies with numbers.** Six viewports, measured with DevTools
   scripts to 0 px: panel edge equals label edge equals photo edge, board
   height stable across tabs, cards aligned across a row, navbar colour

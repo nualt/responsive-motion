@@ -166,4 +166,34 @@ Pass: each array holds identical values.
 - **Anchor landing**: after a same-page hash jump,
   `target.getBoundingClientRect().top` must be ≥ the navbar height.
   Below it, the navbar hides the heading.
+- **Browser zoom is remembered per site.** Chrome, Safari and Edge keep
+  a zoom level per origin: `localhost` at 125 % makes every emulated
+  format 20 % smaller than you think. Check `window.innerWidth` against
+  the window, reset with Cmd/Ctrl + 0. Safari shows no percentage; its
+  steps are 100 → 110 → 125 → 150 %.
+- **Scroll lock hides overflow.** A modal drawer locks body scroll;
+  anchors clicked inside it do not land, and the scrollbar compensation
+  shifts the layout. Test menu links and open/close with a classic
+  scrollbar (Windows, or a Mac with a mouse plugged in), not only with
+  overlay scrollbars.
+
+## Real viewports
+
+Verify modes, not devices. What the site actually gets:
+
+| Hardware | OS scale | Viewport the site sees | Typical mode |
+|---|---|---|---|
+| 15" laptop, 1920×1080 | 150 % (factory) | 1280 × ~630 | flat board, sticky column if its threshold ≤ 600 |
+| 15" laptop, 1920×1080 | 125 % | 1536 × ~775 | scene, short-height band |
+| 14" laptop, 1366×768 | 125 % (factory) | 1093 × 614 | flat |
+| 24" monitor, 1920×1080 | 125 % | 1536 × ~780 | scene, short-height band |
+| 24" monitor, 1920×1080 | 100 % | 1920 × ~995 | scene |
+| MacBook Air 13", 1440×900 | — | 1440 × ~815 | scene, short-height band |
+| 1600×900 monitor | 100 % | 1600 × ~815 | scene, short-height band |
+| iPad landscape | — | 1133 × 744, `hover: none` | flat |
+
+Subtract ~85–120 px of browser chrome from every height. Then test the
+**shortest viewport of each mode** (here 1280×614, 1280×630, 1280×700,
+1024×775) and the designer's own screen; everything between is covered
+by fluid values, and anything outside is a new mode, not a new device.
 
