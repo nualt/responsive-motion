@@ -27,6 +27,7 @@ by one.
 - "The sticky photo is cut when Safari is zoomed twice."
 - "The pinned board is cut at the bottom on a 1280×720 laptop."
 - "The layout jumps when the menu closes."
+- "On a small laptop window the hero ends below the screen."
 
 ## Sub-commands
 
@@ -42,7 +43,7 @@ With an argument, run only that phase:
 ## Read first
 
 1. [reference/principles.md](reference/principles.md) - the seven rules and the decision model (levels: scene, expansion-only, flat, mobile, lite). Read before touching code.
-2. [reference/recipes.md](reference/recipes.md) - twenty-two concrete recipes with code (GSAP + Tailwind v4, readable without them).
+2. [reference/recipes.md](reference/recipes.md) - twenty-three concrete recipes with code (GSAP + Tailwind v4, readable without them).
 3. [reference/verify.md](reference/verify.md) - how to measure, the real viewports behind common hardware, the worst case of each mode, which numbers must be 0.
 4. [reference/anti-patterns.md](reference/anti-patterns.md) - what not to do, with the failures that taught each rule.
 

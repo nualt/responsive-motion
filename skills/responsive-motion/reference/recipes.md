@@ -379,3 +379,31 @@ editing; touch only the named section; after "commit", commit — nothing
 else; when a screenshot contradicts your model, believe the screenshot
 and go read the compiled CSS; when a message is ambiguous, ask one
 question rather than act on the wrong reading twice.
+
+## 23. A full-height hero is a floor, not a guarantee
+
+`min-h-[calc(100dvh-var(--nav-height))]` with the copy centered
+(`items-center`) and generous padding (`lg:py-24`) reads as "always one
+screen". It is not. When copy plus padding exceed the available height,
+the hero grows and its bottom rule, the line the design promises inside
+the first screen, drops below the fold. At 1024×600 (7" tablet in
+landscape, a small laptop window): 371 px of copy + 2 × 96 px of padding
+against 551 px under the navbar, 13 px below the fold. Rare format,
+still a broken first screen.
+
+The padding around a centered block is only a minimum. Shrink it on the
+short-screen variant (same criterion as the short-screen type scale):
+
+```tsx
+<div className="flex items-center py-8 lg:py-24 short:py-8!">
+```
+
+Where there is room the block stays centered, so nothing moves. The `!`
+is there because a custom variant is not guaranteed to sort after `lg:`.
+
+In the same mode, a composition that stacks two windows in one column
+runs out of height first. Drop one (the first window takes the whole
+column, a direct wire replaces the trunk) instead of squeezing both.
+A canvas animation that measures the wires must skip the hidden ones
+(`wire.getClientRects().length`), or it draws zero-length segments at
+the origin.

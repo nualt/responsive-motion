@@ -96,6 +96,11 @@ preference.
   improvement; "enlarge the photo" touched two sections; "no browser"
   got one more measurement. Each was rolled back. Rule: quote the request
   in one line, do exactly that, stop.
+- **Trust `min-h: 100dvh` to keep a hero on one screen.** It is a floor:
+  centered copy with 96 px of padding pushed the bottom rule 13 px below
+  the fold at 1024×600. Rule: padding around a centered block is a
+  minimum, reduced on the short variant; measure
+  `hero.bottom − innerHeight` = 0 at the shortest viewport.
 
 ## Do
 

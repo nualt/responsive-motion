@@ -10,6 +10,7 @@ and whether the fix is exact. Measure first, screenshot once.
 | 1440×900 | mouse | scene (must be strictly unchanged) |
 | 1280×720 | mouse | expansion-only + flat board |
 | 1024×680 | mouse | expansion-only + flat, navbar with burger |
+| 1024×600 | mouse (small laptop window, 7" tablet landscape) | shortest desktop: every full-height hero still ends on screen |
 | 1133×744 | touch (iPad mini landscape) | flat, no transition chrome |
 | 744×1133 | touch, mobile | mobile |
 | 390×844 | touch, mobile | mobile |
@@ -127,6 +128,30 @@ Pass: all `mediaOffsets` equal; all `heights` equal.
 
 Pass: each array holds identical values.
 
+### Hero ends inside the first screen
+
+Iframes at several sizes from one page, no emulation round-trips:
+
+```js
+(async () => {
+  const out = [];
+  for (const [w, h] of [[1024, 500], [1024, 600], [1280, 600], [1280, 720], [1440, 900]]) {
+    const f = Object.assign(document.createElement('iframe'), { src: location.href });
+    f.style.cssText = `position:fixed;left:0;top:0;width:${w}px;height:${h}px;opacity:0;pointer-events:none`;
+    document.body.appendChild(f);
+    await new Promise(r => f.onload = r); await f.contentDocument.fonts.ready;
+    await new Promise(r => setTimeout(r, 800));
+    out.push(`${w}×${h}: ${Math.round(f.contentDocument.querySelector('header').getBoundingClientRect().bottom - h)}`);
+    f.remove();
+  }
+  return out;
+})();
+```
+
+Pass: 0 at every size from `lg` up (below `lg` the hero stacks and may
+scroll). A positive value means the copy plus its padding outgrew the
+screen (recipe 23).
+
 ### Photo in a fixed column
 
 ```js
@@ -191,6 +216,7 @@ Verify modes, not devices. What the site actually gets:
 | MacBook Air 13", 1440×900 | — | 1440 × ~815 | scene, short-height band |
 | 1600×900 monitor | 100 % | 1600 × ~815 | scene, short-height band |
 | iPad landscape | — | 1133 × 744, `hover: none` | flat |
+| 7" tablet landscape, small laptop window | — | 1024 × ~600 | flat, short: hero padding and stacked windows run out first |
 
 Subtract ~85–120 px of browser chrome from every height. Then test the
 **shortest viewport of each mode** (here 1280×614, 1280×630, 1280×700,
