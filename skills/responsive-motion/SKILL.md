@@ -17,8 +17,8 @@ by one.
 - "The pinned section crushes the photo on 1366×768."
 - "Sticky column taller than the viewport, it never sticks / sticks and cuts."
 - "iPad landscape shows the desktop choreography and it jumps."
-- "The blue block / label / badge overlaps the photo by 4 px on some screens."
-- "Navbar turns blue at the top of the page on laptops."
+- "The coloured block / label / badge overlaps the photo by 4 px on some screens."
+- "Navbar changes colour at the top of the page on laptops."
 - "We keep adding `@media (1024px–1279px) and (orientation: landscape)` rules."
 - "Weak machines and reduced-motion users must still see all content."
 - "On the client's phone the colours are wrong / the logo turns black, my phone is fine."
@@ -37,7 +37,7 @@ With an argument, run only that phase:
 | Command | Does |
 |---|---|
 | `/responsive-motion diagnose` | Phase 1 only. Lists scenes, criteria, magic values, reproduces on the six formats with numbers, and proposes the file list. Writes nothing. |
-| `/responsive-motion implement <section>` | Phase 2 on one named section (for example `implement services-board`). Refuses more than one section per call. |
+| `/responsive-motion implement <section>` | Phase 2 on one named section (for example `implement pinned-board`). Refuses more than one section per call. |
 | `/responsive-motion verify` | Phase 3 only: one batched round across the six formats with the measurement snippets from `reference/verify.md`, then a findings list. Writes nothing. |
 
 ## Read first

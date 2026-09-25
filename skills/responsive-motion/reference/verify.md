@@ -48,10 +48,10 @@ Paste into `evaluate_script` / the console. Adapt selectors.
 (async () => {
   await new Promise(r => setTimeout(r, 2500));       // fonts, first refresh
   scrollTo(0, 0); await new Promise(r => setTimeout(r, 800));
-  const label = document.querySelector('a[href="#services"]');
+  const label = document.querySelector('a[data-pin-label]');
   const panel = label.previousElementSibling;          // the scaled block
   const text  = label.querySelector('span span');
-  const media = document.querySelector('[data-hero-media]');
+  const media = document.querySelector('[data-pin-media]');
   const l = label.getBoundingClientRect(), p = panel.getBoundingClientRect(),
         s = text.getBoundingClientRect(),  m = media.getBoundingClientRect();
   const atRest = {
@@ -76,7 +76,7 @@ Pass: `panelH === labelH`, both "minus" values `0`, `textCentreOffset 0`,
 ### Navbar height and pin start
 
 ```js
-({ navbar: document.querySelector('.site-navbar').getBoundingClientRect().height,
+({ navbar: document.querySelector('[data-navbar]').getBoundingClientRect().height,
    stageTop: document.querySelector('[data-stage]').getBoundingClientRect().top })
 ```
 
@@ -90,7 +90,7 @@ value (token read as `NaN`).
   const out = [];
   for (const y of [0, 300, 600, 830, 1500, 2300, 1500, 600, 0]) {
     scrollTo(0, y); await new Promise(r => setTimeout(r, 900));
-    out.push({ y, on: document.documentElement.hasAttribute('data-nav-on-blue') });
+    out.push({ y, on: document.documentElement.hasAttribute('data-nav-inverted') });
   }
   return out;
 })();
@@ -103,9 +103,9 @@ next non-coloured section arrives, symmetric on the way back.
 
 ```js
 (async () => {
-  const panels = [...document.querySelectorAll('[data-service-panel]')];
+  const panels = [...document.querySelectorAll('[data-panel]')];
   const mediaOffsets = panels.map(p =>
-    Math.round(p.querySelector('[data-service-media]').getBoundingClientRect().top - p.getBoundingClientRect().top));
+    Math.round(p.querySelector('[data-panel-media]').getBoundingClientRect().top - p.getBoundingClientRect().top));
   const board = document.querySelector('.board');
   const heights = [];
   for (const t of document.querySelectorAll('[role=tab]')) {
@@ -121,9 +121,9 @@ Pass: all `mediaOffsets` equal; all `heights` equal.
 ### Cards / figures aligned across a row
 
 ```js
-({ h3: [...document.querySelectorAll('#method li h3')].map(e => Math.round(e.getBoundingClientRect().top)),
-   p:  [...document.querySelectorAll('#method li p')].map(e => Math.round(e.getBoundingClientRect().top)),
-   hairlines: [...document.querySelectorAll('[data-about-hairline]')].slice(0,3).map(e => Math.round(e.getBoundingClientRect().top)) })
+({ h3: [...document.querySelectorAll('#steps li h3')].map(e => Math.round(e.getBoundingClientRect().top)),
+   p:  [...document.querySelectorAll('#steps li p')].map(e => Math.round(e.getBoundingClientRect().top)),
+   hairlines: [...document.querySelectorAll('[data-hairline]')].slice(0,3).map(e => Math.round(e.getBoundingClientRect().top)) })
 ```
 
 Pass: each array holds identical values.
@@ -155,7 +155,7 @@ screen (recipe 23).
 ### Photo in a fixed column
 
 ```js
-(() => { const img = document.querySelector('[data-about-photo]'); const col = img.parentElement; const text = col.nextElementSibling;
+(() => { const img = document.querySelector('[data-photo]'); const col = img.parentElement; const text = col.nextElementSibling;
   const i = img.getBoundingClientRect(), c = col.getBoundingClientRect(), t = text.getBoundingClientRect();
   return { photoW: Math.round(i.width), colW: Math.round(c.width), overlapsText: i.right > t.left, bottomsAligned: Math.abs(i.bottom - t.bottom) < 1 }; })()
 ```
@@ -164,7 +164,7 @@ screen (recipe 23).
 
 ```js
 (() => { const r = s => document.querySelector(s).getBoundingClientRect();
-  const b = r('.site-navbar [data-brand]'), n = r('.site-navbar nav > div'), c = r('.site-navbar .navbar-cta-primary');
+  const b = r('[data-navbar] [data-brand]'), n = r('[data-navbar] nav > div'), c = r('[data-navbar] [data-cta]');
   return { fits: n.left >= b.right + 16 && n.right <= c.left - 16 }; })()
 ```
 
@@ -216,7 +216,7 @@ Verify modes, not devices. What the site actually gets:
 | MacBook Air 13", 1440×900 | — | 1440 × ~815 | scene, short-height band |
 | 1600×900 monitor | 100 % | 1600 × ~815 | scene, short-height band |
 | iPad landscape | — | 1133 × 744, `hover: none` | flat |
-| 7" tablet landscape, small laptop window | — | 1024 × ~600 | flat, short: hero padding and stacked windows run out first |
+| 7" tablet landscape, small laptop window | — | 1024 × ~600 | flat, short: hero padding and stacked cards run out first |
 
 Subtract ~85–120 px of browser chrome from every height. Then test the
 **shortest viewport of each mode** (here 1280×614, 1280×630, 1280×700,

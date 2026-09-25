@@ -29,7 +29,7 @@ preference.
   → `ScrollTrigger.refresh()`.
 - **Create scroll triggers before the pin above them without a
   priority.** Failure: a child component's trigger computed its start
-  without the pin spacer; the navbar went blue at scroll 0. Rule:
+  without the pin spacer; the navbar changed colour at scroll 0. Rule:
   `refreshPriority: -1`.
 - **Use `display: none` on stacked panels.** Failure: board height
   jumped with every tab. Rule: `visibility: hidden`.

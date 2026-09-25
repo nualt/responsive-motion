@@ -195,7 +195,7 @@ are about to write `@media (width >= 1024px) and (width < 1280px) and
 
 Chrome for Android ("Auto dark theme") repaints any site that declares
 no colour scheme when the phone is in dark mode: inverted background,
-shifted brand blues, and a logo that the navbar turns white
+shifted brand colours, and a logo that the navbar turns white
 (`filter: brightness(0) invert(1)`) comes out black. iOS Safari never
 does this, so an iPhone in dark mode reproduces nothing. A light-only
 site opts out once:
@@ -226,7 +226,7 @@ in that mode, not just theirs.
 
 ## 15. Native anchors land under the sticky navbar
 
-A same-page `<a href="/#services">` (mobile menu on the home page) is a
+A same-page `<a href="/#pricing">` (mobile menu on the home page) is a
 native hash jump: the router's pathname does not change, so a
 `useEffect([pathname])` scroll handler with a navbar offset never runs.
 The section's top lands at viewport top, and the sticky navbar hides its
@@ -271,12 +271,12 @@ variant pair each:
 
 ```css
 @custom-variant scene        { @media (width >= 64rem) and (height >= 700px) and (hover: hover) { @slot; } }
-@custom-variant method-scene { @media (width >= 64rem) and (height >= 600px) and (hover: hover) { @slot; } }
+@custom-variant steps-scene { @media (width >= 64rem) and (height >= 600px) and (hover: hover) { @slot; } }
 ```
 
 ```ts
 export const SCENE_MIN_HEIGHT_PX = 700;        // pinned board
-export const METHOD_SCENE_MIN_HEIGHT_PX = 600; // sticky column
+export const STEPS_SCENE_MIN_HEIGHT_PX = 600; // sticky column
 ```
 
 Each scene's `gsap.matchMedia` helper uses its own query; a unit test
@@ -331,7 +331,7 @@ Two traps that cost an afternoon each:
 - **A selector that matches nothing does not warn.** The grid div had
   `lg:grid`, the rule targeted `.grid`: the 40 % column "applied" for
   hours in the developer's head. Give every CSS hook a dedicated class
-  (`services-showcase__grid`), never a utility class.
+  (`showcase__grid`), never a utility class.
 - **A `col-span-2` written for three columns explodes a two-column
   grid**: the panel jumps into an implicit third column and the layout
   looks destroyed. Any rule that changes the column count must also
@@ -361,7 +361,7 @@ body[data-scroll-locked] { margin-right: 0 !important; }
 
 A pinned panel that starts at `transform: scale(0.5, 0.09)` in the
 markup and is calibrated by GSAP on the first tick shows one frame of
-the wrong size: the blue band "jumps" at load. Mount the panel
+the wrong size: the coloured band "jumps" at load. Mount the panel
 invisible, measure, then `gsap.set(panel, { scaleX, scaleY, autoAlpha: 1 })`
 before the timeline's `fromTo`. The element the user sees at load must
 be styled by CSS alone (here, the label carries its own background), not
@@ -401,9 +401,9 @@ short-screen variant (same criterion as the short-screen type scale):
 Where there is room the block stays centered, so nothing moves. The `!`
 is there because a custom variant is not guaranteed to sort after `lg:`.
 
-In the same mode, a composition that stacks two windows in one column
-runs out of height first. Drop one (the first window takes the whole
-column, a direct wire replaces the trunk) instead of squeezing both.
-A canvas animation that measures the wires must skip the hidden ones
-(`wire.getClientRects().length`), or it draws zero-length segments at
-the origin.
+In the same mode, an illustration that stacks two cards in one column
+runs out of height first. Drop one (the other takes the whole column,
+a direct connector replaces the branching one) instead of squeezing
+both. A canvas animation that measures the connectors must skip the
+hidden ones (`el.getClientRects().length`), or it draws zero-length
+segments at the origin.
